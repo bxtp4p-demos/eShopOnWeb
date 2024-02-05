@@ -49,7 +49,7 @@ jobs:
           password: ${{ github.token }}
 
       
-      - name: Lowercase the tag
+      - name: Lowercase the tag ${{ matrix.dockerfile }}
         run: printenv
 
       - name: Build and push container image to registry
