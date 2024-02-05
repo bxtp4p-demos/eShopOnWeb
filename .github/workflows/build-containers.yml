@@ -53,5 +53,5 @@ jobs:
         with:
           push: true
           tags: ghcr.io/${{ env.REPO }}-${{ matrix.dockerfile }}:${{ github.sha }} |
-            ghcr.io/${{ env.REPO }}-${{ matrix.dockerfile }}:${{ steps.latest-tag.outputs.tag }}
+            ghcr.io/${{ env.REPO }}-${{ matrix.dockerfile }}:v${{ steps.latest-tag.outputs.tag }}
           file: ./src/${{ matrix.dockerfile }}/Dockerfile
