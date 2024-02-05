@@ -58,5 +58,7 @@ jobs:
         uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5.0.0
         with:
           push: true
-          tags: ghcr.io/${{ env.REPO }}-${{ env.TAG }}:${{ github.sha }} ghcr.io/${{ env.REPO }}-${{ env.TAG }}:v${{ steps.latest-tag.outputs.tag }}
+          tags: |
+            ghcr.io/${{ env.REPO }}-${{ env.TAG }}:${{ github.sha }} 
+            ghcr.io/${{ env.REPO }}-${{ env.TAG }}:v${{ steps.latest-tag.outputs.tag }}
           file: ./src/${{ matrix.dockerfile }}/Dockerfile
