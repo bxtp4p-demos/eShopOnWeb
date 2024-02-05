@@ -1,0 +1,57 @@
+# This workflow will build and push a Docker container to GitHub Container Registry
+#
+# To configure this workflow:
+#
+# - Create a GitHub Personal access token with "repo" and "read:packages" permissions.
+
+name: eShopOnWeb - Build Containers
+
+on:
+  push:
+    branches: [ "main" ]
+    tags:
+      - "v*.*.*"
+  
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        dockerfile: ['PublicApi', 'Web']
+    
+
+    steps:
+      - name: Lowercase the repo name and username
+        run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
+        
+      - uses: actions/checkout@v3
+
+      - name: Get Latest Tag
+        id: latest-tag
+        uses: WyriHaximus/github-action-get-previous-tag@04e8485ecb6487243907e330d522ff60f02283ce
+        with:
+          # Prefix to query the tag by
+          prefix: v
+          fallback: 1.0.0
+          
+
+      - name: Log in to GitHub container registry
+        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+
+      - name: Build and push container image to registry
+        uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5.0.0
+        with:
+          push: true
+          tags: ghcr.io/${{ env.REPO }}-${{ matrix.dockerfile,, }}:${{ github.sha }} |
+            ghcr.io/${{ env.REPO }}-${{ matrix.dockerfile,, }}:${{ steps.latest-tag.outputs.tag }}
+          file: ./src/${{ matrix.dockerfile }}/Dockerfile
