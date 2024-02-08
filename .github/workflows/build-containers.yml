@@ -41,7 +41,7 @@ jobs:
         with:
           # Prefix to query the tag by
           prefix: v
-          fallback: 1.0.0
+          fallback: v1.0.0
           
 
       - name: Log in to GitHub container registry
@@ -63,5 +63,5 @@ jobs:
           push: true
           tags: |
             ghcr.io/${{ env.REPO }}:${{ env.TAG }}-${{ github.sha }} 
-            ghcr.io/${{ env.REPO }}:${{ env.TAG }}-v${{ steps.latest-tag.outputs.tag }}
+            ghcr.io/${{ env.REPO }}:${{ env.TAG }}-${{ steps.latest-tag.outputs.tag }}
           file: ./src/${{ matrix.dockerfile }}/Dockerfile
