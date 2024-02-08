@@ -41,7 +41,7 @@ jobs:
         with:
           # Prefix to query the tag by
           prefix: v
-          fallback: 1.0.0
+          fallback: v1.0.0
           
 
       - name: Log in to GitHub container registry
